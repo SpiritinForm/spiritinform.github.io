@@ -40,81 +40,11 @@
   <script id="seeddata" type="application/json">
   {
     "nodes": [
-      { "id": "magnolia", "label": "Magnolia", "glyph": "🌸", "children": ["root","trunk","branch","leaf","flower","fruit"],
-        "layers": {"physical":"flowering tree, glossy leaves, seed cone","psychological":"calm nobility, grace","spiritual":"form unfolding from hidden seed"} },
-      { "id": "root", "label": "Root", "glyph": "🪵", "layers": {"physical":"anchoring fibers","psychological":"security","spiritual":"truth drawing sustenance"} },
-      { "id": "trunk", "label": "Trunk", "glyph": "🪵", "layers": {"physical":"central column","psychological":"character","spiritual":"unified channel"} },
-      { "id": "branch", "label": "Branch", "glyph": "🌿", "layers": {"physical":"diverging conduits","psychological":"decisions","spiritual":"truths distributing love"} },
-      { "id": "leaf", "label": "Leaf", "glyph": "🍃", "layers": {"physical":"sun-drinking surface","psychological":"attention","spiritual":"reception of light"} },
-      { "id": "flower", "label": "Flower", "glyph": "🌺", "layers": {"physical":"bloom","psychological":"joy","spiritual":"truth made delightful"} },
-      { "id": "fruit", "label": "Fruit", "glyph": "🍎", "layers": {"physical":"sweet vessel of seeds","psychological":"reward","spiritual":"goodness made useful"} }
-    ]
-  }
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-
- <script>
-/* Magnolia Map — bloom + tree silhouette + radial nodes */
-(function () {
-  const nodes = JSON.parse(document.getElementById('seeddata').textContent).nodes;
-
-  const container = document.getElementById('viz');
-  const panelTitle = document.getElementById('panel-title');
-  const panelContent = document.getElementById('panel-content');
-  const togglePotential = document.getElementById('togglePotential');
-  const toggleProjection = document.getElementById('toggleProjection');
-  const meaningDial = document.getElementById('meaningDial');
-  const state = { potential:false, projection:true, meaning:parseFloat(meaningDial.value||'0.4') };
-
-  // SVG layers (background bloom, latent links, hierarchy edges, nodes)
-  const svg = d3.select(container).append('svg').attr('viewBox','-420 -420 840 840');
-  const gBloom  = svg.append('g').attr('class','bg');       // decorative "actual tree" silhouette
-  const gLatent = svg.append('g').attr('class','latent');   // dotted potential links
-  const gLinks  = svg.append('g').attr('class','links');    // hierarchy edges (radial)
-  const gNodes  = svg.append('g').attr('class','nodes');    // node dots/labels
-
-  /* --- BLOOM: L-system turtle that draws an upright tree silhouette --- */
-  function lsystem(iter=4, ang=22.5, len=80) {
-    let str = 'F';
-    const rules = { 'F': 'F[+F][-F]F' };
-    for (let i=0;i<iter;i++) str = [...str].map(ch => rules[ch] || ch).join('');
-
-    const stack = [];
-    let x=0, y=300, a=-90, L=len;  // start bottom center, grow upward
-    const segs = [];
-    for (const ch of str) {
-      if (ch==='F') {
-        const nx = x + L*Math.cos(a*Math.PI/180);
-        const ny = y + L*Math.sin(a*Math.PI/180);
-        segs.push([x,y,nx,ny,L]);
-        x=nx; y=ny;
-      } else if (ch==='+') { a += ang; }
-      else if (ch==='-')    { a -= ang; }
-      else if (ch==='[')    { stack.push([x,y,a,L]); L *= 0.72; }
-      else if (ch===']')    { [x,y,a,L] = stack.pop() || [x,y,a,L]; }
-    }
-    return segs;
-  }
-
-  function drawBloom() {
-    const segs = lsystem(5, 21, 36);
-
-    // Trunk & branches (animated stroke)
-    const branchSel = gBloom.selectAll('path.trunk').data(segs);
-    branchSel.enter().append('path')
-      .attr('class','trunk')
-      .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
-      .attr('stroke','currentColor')
-      .attr('fill','none')
-      .attr('stroke-width', d=> Math.max(1.2, d[4]*0.06))   // thicker near base
-      .attr('stroke-linecap','round')
-      .attr('stroke-dasharray','120 120')
-      .attr('stroke-dashoffset',120)
-      .transition().delay((_,i)=>i*6).duration(700)
-      .attr('stroke-dashoffset',0);
-
-    // Little leaf/bud dots at every branch tip
-    const tips = new Map(); // key by end coordin
-</body>
-</html>
+      { "id": "magnolia", "label": "Magnolia", "glyph": "🌸",
+        "children": ["root","trunk","branch","leaf","flower","fruit"],
+        "layers": {
+          "physical":"flowering tree, glossy leaves, seed cone",
+          "psychological":"calm nobility, grace",
+          "spiritual":"form unfolding from hidden seed"
+        },
+        "relations":{"corresponds_to":["seed","branch","eye","wholeness","tree"]_
