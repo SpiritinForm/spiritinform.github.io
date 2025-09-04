@@ -95,6 +95,7 @@
     const gLatent = svg.append('g').attr('class','latent');   // dotted potential links
     const gLinks  = svg.append('g').attr('class','links');    // hierarchy edges
     const gNodes  = svg.append('g').attr('class','nodes');    // node markers
+    const gFocus  = svg.append('g').attr('class','focus-bloom'); // hover-driven growth
 
     /* ---------- BLOOM: upright tree silhouette ---------- */
     function lsystem(iter=5, ang=21, len=36) {
@@ -119,8 +120,11 @@
       return segs;
     }
 
-    function drawBloom() {
+    function drawBloom(let BLOOM_SEGS = []; // will store all segments for reuse
+) {
       const segs = lsystem(5, 21, 36);
+BLOOM_SEGS = segs; // keep for focus rendering
+
 
       gBloom.selectAll('path.trunk').data(segs).enter().append('path')
         .attr('class','trunk')
@@ -140,7 +144,20 @@
         .attr('class','leaf').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
         .transition().delay((_,i)=>600+i*8).duration(300).attr('r',3.1);
     }
-
+// Y-centers (SVG coords) for regions of the tree (tweak to taste)
+function focusYFor(id){
+  const map = {
+    root:  220,     // near bottom
+    trunk: 140,
+    branch:  40,
+    fruit:   60,
+    leaf:   -40,
+    flower: -120,
+    magnolia: 0
+  };
+  return map[id] ?? 0;
+}
+    
     /* ---------- RADIAL MAP ---------- */
     function buildHierarchy() {
       const map = new Map(nodes.map(n=>[n.id,n]));
@@ -163,10 +180,13 @@
         .transition().duration(900).attr('stroke-dashoffset', 0);
 
       const nodeEnter = gNodes.selectAll('g.node').data(root.descendants()).enter().append('g')
-        .attr('class','node')
-        .attr('transform', d=>{ const [x,y]=point(d); return `translate(${x},${y})`; })
-        .style('cursor','pointer')
-        .on('click', (_,d)=> openPanel(d.data));
+  .attr('class','node')
+  .attr('transform', d=>{ const [x,y]=point(d); return `translate(${x},${y})`; })
+  .style('cursor','pointer')
+  .on('mouseenter', (_,d)=> { drawFocusBloom( focusYFor(d.data.id) ); })
+  .on('mouseleave', clearFocusBloom)
+  .on('click',     (_,d)=> openPanel(d.data));
+
 
       nodeEnter.append('circle').attr('r', 4).attr('fill','currentColor').attr('opacity',0)
         .transition().delay((d,i)=>i*20).duration(500).attr('opacity',1);
@@ -214,6 +234,39 @@
 
     // Boot
     drawBloom();
+    function drawFocusBloom(yCenter){
+  gFocus.selectAll('*').remove();
+  if(!BLOOM_SEGS.length) return;
+  const BAND = 80; // thickness of the focus area (px)
+  const chosen = BLOOM_SEGS.filter(s=>{
+    const midY = (s[1] + s[3]) / 2;
+    return Math.abs(midY - yCenter) <= BAND;
+  });
+  // fade base, then show local growth
+  gBloom.transition().duration(250).style('opacity', 0.10);
+  gFocus.selectAll('path').data(chosen).enter().append('path')
+    .attr('class','trunk focus')
+    .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
+    .attr('stroke','currentColor').attr('fill','none')
+    .attr('stroke-width', d=> Math.max(1.6, d[4]*0.07))
+    .attr('stroke-linecap','round')
+    .attr('stroke-dasharray','120 120')
+    .attr('stroke-dashoffset',120)
+    .transition().duration(500)
+    .attr('stroke-dashoffset',0);
+  // soft leaves on tips in the band
+  const tips = new Map();
+  chosen.forEach(s => tips.set(s[2].toFixed(1)+','+s[3].toFixed(1), [s[2],s[3]]));
+  gFocus.selectAll('circle.leaf').data(Array.from(tips.values())).enter().append('circle')
+    .attr('class','leaf focus').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
+    .transition().duration(300).attr('r',4.2);
+}
+
+function clearFocusBloom(){
+  gFocus.selectAll('*').remove();
+  gBloom.transition().duration(250).style('opacity', 0.32);
+}
+
     renderRadial();
     openPanel(nodes.find(n=>n.id==='magnolia')||nodes[0]);
     latentEdges();
