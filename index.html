@@ -25,7 +25,7 @@
       <aside id="panel" aria-live="polite">
         <h2 id="panel-title">Welcome</h2>
         <div id="panel-content">
-          <p>Hover a node to reveal layers. Click to open/graft. Long-press to bookmark.</p>
+          <p>Click a node to open layers. ⭕ shows latent links; the slider controls density.</p>
           <p class="credit-chip">Atlas UB — Unicode & Digital Metaphysics • Circle↔Tree lens</p>
         </div>
       </aside>
@@ -36,148 +36,63 @@
     </footer>
   </div>
 
-  <!-- Seed data inlined to avoid fetch/module issues -->
-  <script id="seeddata" type="application/json">{"version": "0.1.0", "generated_at": "2025-09-04T01:17:09.863725Z", "nodes": [{"id": "atlas-ub-digital-metaphysics", "type": "theory", "name": "Atlas UB — Unicode & Digital Metaphysics", "core_symbols": [{"label": "Circle", "glyph": "⭕", "codepoint": "U+2B55", "meaning": "vacuum / infinite potential"}, {"label": "Tree", "glyph": "🌳", "codepoint": "U+1F333", "meaning": "rendered hologram / chosen meanings"}], "thesis": "Potential (⭕) condenses via attention/meaning into structured projection (🌳). Unicode is the shared symbolic lattice for rendering.", "media": [{"kind": "video", "title": "Unicode #3 (Manifold Calculus Rendering Hologram)", "provider": "YouTube", "url": "https://www.youtube.com/watch?v=6d4tI8GHz5A"}], "attribution": "Theory by Atlas UB. Integrated with permission. © Atlas UB."}, {"id": "magnolia", "type": "concept", "label": "Magnolia", "glyph": "🌸", "codepoint": "U+1F338", "layers": {"physical": "flowering tree, glossy leaves, seed cone", "psychological": "calm nobility, grace, gentle strength", "spiritual": "form unfolding from a hidden seed"}, "relations": {"corresponds_to": ["seed", "branch", "eye", "wholeness", "tree"]}, "children": ["root", "trunk", "branch", "leaf", "flower", "fruit"]}, {"id": "circle", "type": "concept", "label": "Circle", "glyph": "⭕", "codepoint": "U+2B55", "layers": {"physical": "unbounded curve", "psychological": "acceptance, inclusion", "spiritual": "infinite potential / vacuum"}, "relations": {"corresponds_to": ["wholeness", "seed", "eye"]}, "theories": ["atlas-ub-digital-metaphysics"]}, {"id": "tree", "type": "concept", "label": "Tree", "glyph": "🌳", "codepoint": "U+1F333", "layers": {"physical": "roots, trunk, branches, leaves", "psychological": "growth, stability, lineage", "spiritual": "projection / rendered hologram"}, "relations": {"corresponds_to": ["branch", "root", "trunk", "leaf", "seed", "magnolia"]}, "theories": ["atlas-ub-digital-metaphysics"]}, {"id": "seed", "type": "concept", "label": "Seed", "glyph": "🌱", "codepoint": "U+1F331", "layers": {"physical": "germinal core", "psychological": "intention, promise", "spiritual": "inmost pattern (logos)"}, "relations": {"corresponds_to": ["circle", "root", "word"]}, "children": ["root"]}, {"id": "root", "type": "concept", "label": "Root", "glyph": "🪵", "codepoint": "U+1FA75", "layers": {"physical": "anchoring fibers", "psychological": "security, belonging", "spiritual": "truth drawing sustenance"}, "relations": {"corresponds_to": ["earth", "seed", "trunk"]}}, {"id": "trunk", "type": "concept", "label": "Trunk", "glyph": "🪵", "codepoint": "U+1FA75", "layers": {"physical": "central column", "psychological": "character, backbone", "spiritual": "unified channel of use"}, "relations": {"corresponds_to": ["branch", "root"]}}, {"id": "branch", "type": "concept", "label": "Branch", "glyph": "🌿", "codepoint": "U+1F33F", "layers": {"physical": "diverging conduits", "psychological": "decisions, alternatives", "spiritual": "truths distributing love"}, "relations": {"corresponds_to": ["leaf", "flower", "fruit", "tree"]}}, {"id": "leaf", "type": "concept", "label": "Leaf", "glyph": "🍃", "codepoint": "U+1F343", "layers": {"physical": "sun-drinking surface", "psychological": "attention, learning", "spiritual": "reception and respiration of light"}, "relations": {"corresponds_to": ["light", "air", "breath", "branch"]}}, {"id": "flower", "type": "concept", "label": "Flower", "glyph": "🌺", "codepoint": "U+1F33A", "layers": {"physical": "reproductive bloom", "psychological": "joy, display", "spiritual": "truth made delightful"}, "relations": {"corresponds_to": ["seed", "beauty", "magnolia"]}}, {"id": "fruit", "type": "concept", "label": "Fruit", "glyph": "🍎", "codepoint": "U+1F34E", "layers": {"physical": "sweet vessel of seeds", "psychological": "outcome, reward", "spiritual": "goodness made useful"}, "relations": {"corresponds_to": ["seed", "branch", "use"]}}, {"id": "eye", "type": "concept", "label": "Eye", "glyph": "👁", "codepoint": "U+1F441", "layers": {"physical": "sight organ", "psychological": "attention, awareness", "spiritual": "understanding / seeing-as-self"}, "relations": {"corresponds_to": ["light", "circle", "word"]}, "theories": ["atlas-ub-digital-metaphysics"]}, {"id": "breath", "type": "concept", "label": "Breath", "glyph": "🌬️", "codepoint": "U+1F32C", "layers": {"physical": "inhalation/exhalation", "psychological": "calm, regulation", "spiritual": "spirit moving through forms"}, "relations": {"corresponds_to": ["air", "leaf", "heart"]}}, {"id": "heart", "type": "concept", "label": "Heart", "glyph": "❤️", "codepoint": "U+2764", "layers": {"physical": "circulatory center", "psychological": "affection, courage", "spiritual": "love as motive force"}, "relations": {"corresponds_to": ["blood", "use", "wholeness"]}}, {"id": "light", "type": "concept", "label": "Light", "glyph": "💡", "codepoint": "U+1F4A1", "layers": {"physical": "illumination", "psychological": "insight, clarity", "spiritual": "truth revealing forms"}, "relations": {"corresponds_to": ["eye", "leaf", "word"]}}, {"id": "word", "type": "concept", "label": "Word", "glyph": "🔤", "codepoint": "U+1F524", "layers": {"physical": "encoded marks/sounds", "psychological": "meaning, naming", "spiritual": "logos / ordering principle"}, "relations": {"corresponds_to": ["seed", "light", "eye", "sound", "unicode"]}}, {"id": "unicode", "type": "concept", "label": "Unicode", "glyph": "🧩", "codepoint": "N/A", "layers": {"physical": "code points & planes", "psychological": "shared symbol set", "spiritual": "collective lattice for meaning"}, "relations": {"corresponds_to": ["word", "circle", "tree"]}, "theories": ["atlas-ub-digital-metaphysics"]}, {"id": "sound", "type": "concept", "label": "Sound", "glyph": "🔊", "codepoint": "U+1F50A", "layers": {"physical": "pressure waves", "psychological": "tone, voice", "spiritual": "vibration shaping matter"}, "relations": {"corresponds_to": ["word", "air", "water"]}}, {"id": "water", "type": "concept", "label": "Water", "glyph": "💧", "codepoint": "U+1F4A7", "layers": {"physical": "fluid medium", "psychological": "feeling, flow", "spiritual": "truths applied to life"}, "relations": {"corresponds_to": ["leaf", "root", "breath"]}}, {"id": "earth", "type": "concept", "label": "Earth", "glyph": "🌎", "codepoint": "U+1F30E", "layers": {"physical": "soil, matter", "psychological": "groundedness", "spiritual": "ultimate plane of effects"}, "relations": {"corresponds_to": ["root", "use", "tree"]}}, {"id": "air", "type": "concept", "label": "Air", "glyph": "🌬️", "codepoint": "U+1F32C", "layers": {"physical": "atmosphere", "psychological": "ideas, movement", "spiritual": "life-breath carrying thought"}, "relations": {"corresponds_to": ["leaf", "breath", "sound"]}}, {"id": "fire", "type": "concept", "label": "Fire", "glyph": "🔥", "codepoint": "U+1F525", "layers": {"physical": "combustion", "psychological": "drive, zeal", "spiritual": "love in act"}, "relations": {"corresponds_to": ["light", "heart", "use"]}}, {"id": "wholeness", "type": "concept", "label": "Wholeness", "glyph": "🕊️", "codepoint": "U+1F54A", "layers": {"physical": "integrated system", "psychological": "coherence, peace", "spiritual": "oneness appearing as many"}, "relations": {"corresponds_to": ["circle", "heart", "magnolia"]}, "theories": ["atlas-ub-digital-metaphysics"]}, {"id": "use", "type": "concept", "label": "Use", "glyph": "🧭", "codepoint": "U+1F9ED", "layers": {"physical": "purposeful function", "psychological": "service, contribution", "spiritual": "love realized in action"}, "relations": {"corresponds_to": ["fruit", "earth", "fire"]}}]}</script>
+  <!-- Embedded dataset -->
+  <script id="seeddata" type="application/json">
+  {
+    "nodes": [
+      { "id": "magnolia", "label": "Magnolia", "glyph": "🌸", "children": ["root","trunk","branch","leaf","flower","fruit"],
+        "layers": {"physical":"flowering tree, glossy leaves, seed cone","psychological":"calm nobility, grace","spiritual":"form unfolding from hidden seed"} },
+      { "id": "root", "label": "Root", "glyph": "🪵", "layers": {"physical":"anchoring fibers","psychological":"security","spiritual":"truth drawing sustenance"} },
+      { "id": "trunk", "label": "Trunk", "glyph": "🪵", "layers": {"physical":"central column","psychological":"character","spiritual":"unified channel"} },
+      { "id": "branch", "label": "Branch", "glyph": "🌿", "layers": {"physical":"diverging conduits","psychological":"decisions","spiritual":"truths distributing love"} },
+      { "id": "leaf", "label": "Leaf", "glyph": "🍃", "layers": {"physical":"sun-drinking surface","psychological":"attention","spiritual":"reception of light"} },
+      { "id": "flower", "label": "Flower", "glyph": "🌺", "layers": {"physical":"bloom","psychological":"joy","spiritual":"truth made delightful"} },
+      { "id": "fruit", "label": "Fruit", "glyph": "🍎", "layers": {"physical":"sweet vessel of seeds","psychological":"reward","spiritual":"goodness made useful"} }
+    ]
+  }
+  </script>
 
-  <!-- D3 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 
-  <!-- App (non-module for max compatibility) -->
   <script>
   (function(){
-
+    const nodes = JSON.parse(document.getElementById('seeddata').textContent).nodes;
     const container = document.getElementById('viz');
     const panelTitle = document.getElementById('panel-title');
     const panelContent = document.getElementById('panel-content');
     const togglePotential = document.getElementById('togglePotential');
     const toggleProjection = document.getElementById('toggleProjection');
     const meaningDial = document.getElementById('meaningDial');
+    const state = { potential:false, projection:true, meaning:parseFloat(meaningDial.value) };
 
-    let svg, gLinks, gNodes, gLatent;
-    const state = { potential:false, projection:true, meaning: parseFloat(meaningDial.value || '0.4') };
+    const svg = d3.select(container).append('svg').attr('viewBox','-420 -420 840 840');
+    const gLinks = svg.append('g'); const gNodes = svg.append('g');
 
-    function parseSeed(){
-      try{ return JSON.parse(document.getElementById('seeddata').textContent).nodes || []; }
-      catch(e){ console.error('Seed parse error', e); return []; }
+    function buildHierarchy(){
+      const map = new Map(nodes.map(n=>[n.id,n]));
+      const root = map.get("magnolia");
+      return d3.hierarchy(root, n => (n.children||[]).map(id=>map.get(id)).filter(Boolean));
     }
+    function point(d){ const r=d.y,a=d.x-Math.PI/2; return [Math.cos(a)*r,Math.sin(a)*r]; }
+    const layout = d3.tree().size([2*Math.PI,340]);
+    const root = layout(buildHierarchy());
 
-    function buildHierarchy(nodes, rootId='magnolia'){
-      const rootNode = nodes.find(n=>n.id===rootId) || nodes[0];
-      const map = new Map(nodes.map(n => [n.id, n]));
-      function children(n){ return (n.children||[]).map(id => map.get(id)).filter(Boolean); }
-      return d3.hierarchy(rootNode, children);
-    }
+    gLinks.selectAll('path').data(root.links()).enter().append('path')
+      .attr('stroke','currentColor').attr('fill','none')
+      .attr('d',d=>{ const [sx,sy]=point(d.source),[tx,ty]=point(d.target); return `M${sx},${sy}L${tx},${ty}`; });
 
-    function initSVG(){
-      container.innerHTML = '';
-      svg = d3.select(container).append('svg').attr('viewBox','-420 -420 840 840');
-      gLatent = svg.append('g').attr('class','latent-layer');
-      gLinks  = svg.append('g').attr('class','links');
-      gNodes  = svg.append('g').attr('class','nodes');
-    }
-
-    function renderTree(nodes){
-      const root = buildHierarchy(nodes);
-      const tree = d3.tree().size([2*Math.PI, 340]).separation((a,b)=> (a.parent==b.parent ? 1 : 2));
-      const radial = tree(root);
-      const point = (d)=>{ const r=d.y, a=d.x - Math.PI/2; return [Math.cos(a)*r, Math.sin(a)*r]; };
-
-      const linkSel = gLinks.selectAll('path').data(radial.links(), d=> d.target.data.id);
-      linkSel.join(
-        enter => enter.append('path')
-          .attr('class','edge').attr('fill','none').attr('stroke','currentColor')
-          .attr('stroke-opacity',0.35).attr('stroke-width',1.2)
-          .attr('d', d => { const [sx,sy]=point(d.source); const [tx,ty]=point(d.target); return `M${sx},${sy}C${sx},${sy} ${tx},${ty} ${tx},${ty}`; })
-          .attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
-          .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
-          .transition().duration(1200).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0),
-        update => update,
-        exit => exit.remove()
-      );
-
-      const nodeSel = gNodes.selectAll('g.node').data(radial.descendants(), d=> d.data.id);
-      const nodeEnter = nodeSel.enter().append('g').attr('class','node')
-        .attr('transform', d=> { const [x,y]=point(d); return `translate(${x},${y})`; })
-        .style('cursor','pointer').on('click', (_,d)=> openPanel(d.data));
-
-      nodeEnter.append('circle').attr('r', 4).attr('fill','currentColor').attr('opacity',0)
-        .transition().delay((d,i)=>i*20).duration(500).attr('opacity',1);
-
-      nodeEnter.append('text').attr('dy','-0.6em').attr('text-anchor','middle')
-        .text(d=> (d.data.label || d.data.name)).attr('opacity',0)
-        .transition().delay((d,i)=>150+i*18).duration(500).attr('opacity',0.95);
-    }
+    const nodeEnter = gNodes.selectAll('g').data(root.descendants()).enter().append('g')
+      .attr('transform',d=>{const [x,y]=point(d);return`translate(${x},${y})`;})
+      .style('cursor','pointer').on('click',(_,d)=>openPanel(d.data));
+    nodeEnter.append('circle').attr('r',4).attr('fill','currentColor');
+    nodeEnter.append('text').attr('dy','-0.6em').attr('text-anchor','middle').text(d=>d.data.label);
 
     function openPanel(node){
-      const title = node.label || node.name || 'Node';
-      panelTitle.textContent = `${node.glyph ? node.glyph + ' ' : ''}${title}`;
-      const layers = node.layers || {}, cp = node.codepoint ? `<div class="panel-meta">Codepoint: ${node.codepoint}</div>` : '';
-      let list = '<ul class="panel-list">';
-      ['physical','psychological','spiritual'].forEach(k=>{ if(layers[k]) list += `<li><strong>${k[0].toUpperCase()+k.slice(1)}</strong>: ${layers[k]}</li>`; });
-      list += '</ul>';
-      let mediaHTML='';
-      if(node.media) node.media.forEach(m=>{
-        if(m.kind==='video' && m.provider==='YouTube' && m.url){
-          try{ const vid = new URL(m.url).searchParams.get('v'); if(vid) mediaHTML += `<div class="media"><iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe></div>`; }
-          catch(_e){ mediaHTML += `<div class="media"><a href="${m.url}" target="_blank" rel="noopener">Open video</a></div>`; }
-        }
-      });
-      let relHTML=''; if(node.relations && node.relations.corresponds_to){
-        relHTML = `<div class="panel-meta">Corresponds to: ${node.relations.corresponds_to.join(', ')}</div>`;
-      }
-      panelContent.innerHTML = `${cp}${list}${relHTML}${mediaHTML}`;
+      panelTitle.textContent = (node.glyph||'')+' '+node.label;
+      const L = node.layers||{}; panelContent.innerHTML = ['physical','psychological','spiritual']
+        .map(k=>L[k]?`<div class="pill"><strong>${k}:</strong> ${L[k]}</div>`:'').join('');
     }
-
-    function latentEdges(nodes, meaning=0.4){
-      gLatent.selectAll('*').remove();
-      if(!state.potential) return;
-      const map = new Map(nodes.map(n=>[n.id,n]));
-      const positions = new Map();
-      gNodes.selectAll('g.node').each(function(d){
-        const m = d3.select(this).attr('transform');
-        const match = /translate\(([-0-9.]+),([-0-9.]+)\)/.exec(m);
-        if(match) positions.set(d.data.id, [parseFloat(match[1]), parseFloat(match[2])]);
-      });
-      const edges=[];
-      nodes.forEach(n=>{
-        const rels = (n.relations && n.relations.corresponds_to) ? n.relations.corresponds_to : [];
-        rels.forEach(rid=>{ if(map.has(rid) && n.id < rid) edges.push([n.id,rid]); });
-      });
-      const take = Math.max(1, Math.floor(edges.length * meaning));
-      const sample = edges.slice(0, take);
-      gLatent.selectAll('path').data(sample).enter().append('path')
-        .attr('class','edge latent').attr('fill','none').attr('stroke','currentColor').attr('stroke-width',1)
-        .attr('d', d=>{
-          const a=positions.get(d[0]), b=positions.get(d[1]); if(!a||!b) return null;
-          const [sx,sy]=a, [tx,ty]=b; const mx=(sx+tx)/2, my=(sy+ty)/2-30;
-          return `M${sx},${sy} Q ${mx},${my} ${tx},${ty}`;
-        }).attr('stroke-opacity',0).transition().duration(600).attr('stroke-opacity',0.5);
-    }
-
-    function boot(){
-      const nodes = parseSeed();
-      initSVG();
-      renderTree(nodes);
-      const first = nodes.find(n=> n.id==='magnolia') || nodes[0];
-      if(first) openPanel(first);
-      latentEdges(nodes, state.meaning);
-
-      togglePotential.addEventListener('click', ()=>{
-        state.potential = !state.potential;
-        togglePotential.setAttribute('aria-pressed', String(state.potential));
-        d3.select('.credit-chip').text(`Atlas UB — Lens: ${state.potential ? 'Potential (⭕) active' : 'Projection (🌳) active'}`);
-        latentEdges(nodes, state.meaning);
-      });
-      toggleProjection.addEventListener('click', ()=>{
-        state.projection = !state.projection;
-        toggleProjection.setAttribute('aria-pressed', String(state.projection));
-        gLinks.selectAll('path').attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
-          .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
-          .transition().duration(1000).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
-      });
-      meaningDial.addEventListener('input', (e)=>{ state.meaning=parseFloat(e.target.value); latentEdges(nodes, state.meaning); });
-    }
-    boot();
+    openPanel(nodes[0]);
   })();
   </script>
 </body>
