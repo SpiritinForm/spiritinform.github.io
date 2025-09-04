@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magnolia Map — Secret Alphabet</title>
+  <meta name="description" content="A living map of correspondences (Magnolia Tree) with Atlas UB's Circle↔Tree lens." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chrome">
+    <header>
+      <h1>Magnolia Map — Secret Alphabet</h1>
+      <div class="toggles">
+        <button id="togglePotential">⭕ Potential</button>
+        <button id="toggleProjection">🌳 Projection</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="viz"></div>
+      <aside id="panel">
+        <h2 id="panel-title">Welcome</h2>
+        <div id="panel-content">
+          <p>Hover a node to reveal layers. Click to open/graft. Long-press to bookmark.</p>
+          <p class="credit-chip">Atlas UB — Unicode & Digital Metaphysics • Circle↔Tree lens</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <small>© Lindsey Ryan Wiley & Atlas UB • Content CC BY‑NC 4.0 • Code MIT</small>
+    </footer>
+  </div>
+
+  <!-- D3 from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha512-+e3lMdXA3AqCuM1Zzs9v8wK2GqL9+f0C8txHfr0HEvuvmG7u2iU07J2fLlYr6T7F62pK1f3tW0w3gDhCENbJTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Layout sketch -->
+  <script type="module" src="d3_layout_spec.js"></script>
+
+  <!-- App -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>

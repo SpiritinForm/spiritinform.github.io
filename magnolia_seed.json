@@ -1,0 +1,554 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2025-09-04T00:19:51.221922Z",
+  "about": {
+    "title": "Magnolia Map — Secret Alphabet (Starter Pack)",
+    "description": "A seed dataset for the living correspondences map. Includes Atlas UB's Circle↔Tree theory lens.",
+    "license": "CC BY-NC 4.0 (content) • Code MIT (suggested)",
+    "authors": [
+      "Lindsey Ryan Wiley",
+      "Atlas UB"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "atlas-ub-digital-metaphysics",
+      "type": "theory",
+      "name": "Atlas UB — Unicode & Digital Metaphysics",
+      "core_symbols": [
+        {
+          "label": "Circle",
+          "glyph": "⭕",
+          "codepoint": "U+2B55",
+          "meaning": "vacuum / infinite potential"
+        },
+        {
+          "label": "Tree",
+          "glyph": "🌳",
+          "codepoint": "U+1F333",
+          "meaning": "rendered hologram / chosen meanings"
+        }
+      ],
+      "thesis": "Potential (⭕) condenses via attention/meaning into structured projection (🌳). Unicode is the shared symbolic lattice for rendering.",
+      "media": [
+        {
+          "kind": "video",
+          "title": "Unicode #3 (Manifold Calculus Rendering Hologram)",
+          "provider": "YouTube",
+          "url": "https://www.youtube.com/watch?v=6d4tI8GHz5A",
+          "notes": "Circle→Tree: vacuum-of-possibility to holographic render through meaning."
+        }
+      ],
+      "attribution": "Theory by Atlas UB. Integrated with permission. © Atlas UB."
+    },
+    {
+      "id": "magnolia",
+      "type": "concept",
+      "label": "Magnolia",
+      "glyph": "🌸",
+      "codepoint": "U+1F338",
+      "layers": {
+        "physical": "flowering tree, glossy leaves, seed cone",
+        "psychological": "calm nobility, grace, gentle strength",
+        "spiritual": "form unfolding from a hidden seed"
+      },
+      "relations": {
+        "corresponds_to": [
+          "seed",
+          "branch",
+          "eye",
+          "wholeness",
+          "tree"
+        ]
+      },
+      "children": [
+        "root",
+        "trunk",
+        "branch",
+        "leaf",
+        "flower",
+        "fruit"
+      ]
+    },
+    {
+      "id": "circle",
+      "type": "concept",
+      "label": "Circle",
+      "glyph": "⭕",
+      "codepoint": "U+2B55",
+      "layers": {
+        "physical": "unbounded curve",
+        "psychological": "acceptance, inclusion",
+        "spiritual": "infinite potential / vacuum"
+      },
+      "relations": {
+        "corresponds_to": [
+          "wholeness",
+          "seed",
+          "eye"
+        ]
+      },
+      "theories": [
+        "atlas-ub-digital-metaphysics"
+      ]
+    },
+    {
+      "id": "tree",
+      "type": "concept",
+      "label": "Tree",
+      "glyph": "🌳",
+      "codepoint": "U+1F333",
+      "layers": {
+        "physical": "roots, trunk, branches, leaves",
+        "psychological": "growth, stability, lineage",
+        "spiritual": "projection / rendered hologram"
+      },
+      "relations": {
+        "corresponds_to": [
+          "branch",
+          "root",
+          "trunk",
+          "leaf",
+          "seed",
+          "magnolia"
+        ]
+      },
+      "theories": [
+        "atlas-ub-digital-metaphysics"
+      ]
+    },
+    {
+      "id": "seed",
+      "type": "concept",
+      "label": "Seed",
+      "glyph": "🌱",
+      "codepoint": "U+1F331",
+      "layers": {
+        "physical": "germinal core",
+        "psychological": "intention, promise",
+        "spiritual": "inmost pattern (logos)"
+      },
+      "relations": {
+        "corresponds_to": [
+          "circle",
+          "root",
+          "word"
+        ]
+      },
+      "children": [
+        "root"
+      ]
+    },
+    {
+      "id": "root",
+      "type": "concept",
+      "label": "Root",
+      "glyph": "🫚",
+      "codepoint": "U+1F9DA?",
+      "layers": {
+        "physical": "anchoring fibers",
+        "psychological": "security, belonging",
+        "spiritual": "truth drawing sustenance"
+      },
+      "relations": {
+        "corresponds_to": [
+          "earth",
+          "seed",
+          "trunk"
+        ]
+      }
+    },
+    {
+      "id": "trunk",
+      "type": "concept",
+      "label": "Trunk",
+      "glyph": "🪵",
+      "codepoint": "U+1FA75",
+      "layers": {
+        "physical": "central column",
+        "psychological": "character, backbone",
+        "spiritual": "unified channel of use"
+      },
+      "relations": {
+        "corresponds_to": [
+          "branch",
+          "root"
+        ]
+      }
+    },
+    {
+      "id": "branch",
+      "type": "concept",
+      "label": "Branch",
+      "glyph": "🌿",
+      "codepoint": "U+1F33F",
+      "layers": {
+        "physical": "diverging conduits",
+        "psychological": "decisions, alternatives",
+        "spiritual": "truths distributing love"
+      },
+      "relations": {
+        "corresponds_to": [
+          "leaf",
+          "flower",
+          "fruit",
+          "tree"
+        ]
+      }
+    },
+    {
+      "id": "leaf",
+      "type": "concept",
+      "label": "Leaf",
+      "glyph": "🍃",
+      "codepoint": "U+1F343",
+      "layers": {
+        "physical": "sun-drinking surface",
+        "psychological": "attention, learning",
+        "spiritual": "reception and respiration of light"
+      },
+      "relations": {
+        "corresponds_to": [
+          "light",
+          "air",
+          "breath",
+          "branch"
+        ]
+      }
+    },
+    {
+      "id": "flower",
+      "type": "concept",
+      "label": "Flower",
+      "glyph": "🌺",
+      "codepoint": "U+1F33A",
+      "layers": {
+        "physical": "reproductive bloom",
+        "psychological": "joy, display",
+        "spiritual": "truth made delightful"
+      },
+      "relations": {
+        "corresponds_to": [
+          "seed",
+          "beauty",
+          "magnolia"
+        ]
+      }
+    },
+    {
+      "id": "fruit",
+      "type": "concept",
+      "label": "Fruit",
+      "glyph": "🍎",
+      "codepoint": "U+1F34E",
+      "layers": {
+        "physical": "sweet vessel of seeds",
+        "psychological": "outcome, reward",
+        "spiritual": "goodness made useful"
+      },
+      "relations": {
+        "corresponds_to": [
+          "seed",
+          "branch",
+          "use"
+        ]
+      }
+    },
+    {
+      "id": "eye",
+      "type": "concept",
+      "label": "Eye",
+      "glyph": "👁",
+      "codepoint": "U+1F441",
+      "layers": {
+        "physical": "sight organ",
+        "psychological": "attention, awareness",
+        "spiritual": "understanding / seeing-as-self"
+      },
+      "relations": {
+        "corresponds_to": [
+          "light",
+          "circle",
+          "word"
+        ]
+      },
+      "theories": [
+        "atlas-ub-digital-metaphysics"
+      ]
+    },
+    {
+      "id": "breath",
+      "type": "concept",
+      "label": "Breath",
+      "glyph": "🌬️",
+      "codepoint": "U+1F32C",
+      "layers": {
+        "physical": "inhalation/exhalation",
+        "psychological": "calm, regulation",
+        "spiritual": "spirit moving through forms"
+      },
+      "relations": {
+        "corresponds_to": [
+          "air",
+          "leaf",
+          "heart"
+        ]
+      }
+    },
+    {
+      "id": "heart",
+      "type": "concept",
+      "label": "Heart",
+      "glyph": "❤️",
+      "codepoint": "U+2764",
+      "layers": {
+        "physical": "circulatory center",
+        "psychological": "affection, courage",
+        "spiritual": "love as motive force"
+      },
+      "relations": {
+        "corresponds_to": [
+          "blood",
+          "use",
+          "wholeness"
+        ]
+      }
+    },
+    {
+      "id": "light",
+      "type": "concept",
+      "label": "Light",
+      "glyph": "💡",
+      "codepoint": "U+1F4A1",
+      "layers": {
+        "physical": "illumination",
+        "psychological": "insight, clarity",
+        "spiritual": "truth revealing forms"
+      },
+      "relations": {
+        "corresponds_to": [
+          "eye",
+          "leaf",
+          "word"
+        ]
+      }
+    },
+    {
+      "id": "word",
+      "type": "concept",
+      "label": "Word",
+      "glyph": "🔤",
+      "codepoint": "U+1F524",
+      "layers": {
+        "physical": "encoded marks/sounds",
+        "psychological": "meaning, naming",
+        "spiritual": "logos / ordering principle"
+      },
+      "relations": {
+        "corresponds_to": [
+          "seed",
+          "light",
+          "eye",
+          "sound",
+          "unicode"
+        ]
+      }
+    },
+    {
+      "id": "unicode",
+      "type": "concept",
+      "label": "Unicode",
+      "glyph": "🧩",
+      "codepoint": "N/A",
+      "layers": {
+        "physical": "code points & planes",
+        "psychological": "shared symbol set",
+        "spiritual": "collective lattice for meaning"
+      },
+      "relations": {
+        "corresponds_to": [
+          "word",
+          "circle",
+          "tree"
+        ]
+      },
+      "theories": [
+        "atlas-ub-digital-metaphysics"
+      ]
+    },
+    {
+      "id": "sound",
+      "type": "concept",
+      "label": "Sound",
+      "glyph": "🔊",
+      "codepoint": "U+1F50A",
+      "layers": {
+        "physical": "pressure waves",
+        "psychological": "tone, voice",
+        "spiritual": "vibration shaping matter"
+      },
+      "relations": {
+        "corresponds_to": [
+          "word",
+          "air",
+          "water"
+        ]
+      }
+    },
+    {
+      "id": "water",
+      "type": "concept",
+      "label": "Water",
+      "glyph": "💧",
+      "codepoint": "U+1F4A7",
+      "layers": {
+        "physical": "fluid medium",
+        "psychological": "feeling, flow",
+        "spiritual": "truths applied to life"
+      },
+      "relations": {
+        "corresponds_to": [
+          "leaf",
+          "root",
+          "breath"
+        ]
+      }
+    },
+    {
+      "id": "earth",
+      "type": "concept",
+      "label": "Earth",
+      "glyph": "🌎",
+      "codepoint": "U+1F30E",
+      "layers": {
+        "physical": "soil, matter",
+        "psychological": "groundedness",
+        "spiritual": "ultimate plane of effects"
+      },
+      "relations": {
+        "corresponds_to": [
+          "root",
+          "use",
+          "tree"
+        ]
+      }
+    },
+    {
+      "id": "air",
+      "type": "concept",
+      "label": "Air",
+      "glyph": "🌬️",
+      "codepoint": "U+1F32C",
+      "layers": {
+        "physical": "atmosphere",
+        "psychological": "ideas, movement",
+        "spiritual": "life-breath carrying thought"
+      },
+      "relations": {
+        "corresponds_to": [
+          "leaf",
+          "breath",
+          "sound"
+        ]
+      }
+    },
+    {
+      "id": "fire",
+      "type": "concept",
+      "label": "Fire",
+      "glyph": "🔥",
+      "codepoint": "U+1F525",
+      "layers": {
+        "physical": "combustion",
+        "psychological": "drive, zeal",
+        "spiritual": "love in act"
+      },
+      "relations": {
+        "corresponds_to": [
+          "light",
+          "heart",
+          "use"
+        ]
+      }
+    },
+    {
+      "id": "wholeness",
+      "type": "concept",
+      "label": "Wholeness",
+      "glyph": "🕊️",
+      "codepoint": "U+1F54A",
+      "layers": {
+        "physical": "integrated system",
+        "psychological": "coherence, peace",
+        "spiritual": "oneness appearing as many"
+      },
+      "relations": {
+        "corresponds_to": [
+          "circle",
+          "heart",
+          "magnolia"
+        ]
+      },
+      "theories": [
+        "atlas-ub-digital-metaphysics"
+      ]
+    },
+    {
+      "id": "use",
+      "type": "concept",
+      "label": "Use",
+      "glyph": "🧭",
+      "codepoint": "U+1F9ED",
+      "layers": {
+        "physical": "purposeful function",
+        "psychological": "service, contribution",
+        "spiritual": "love realized in action"
+      },
+      "relations": {
+        "corresponds_to": [
+          "fruit",
+          "earth",
+          "fire"
+        ]
+      }
+    }
+  ],
+  "ui": {
+    "views": [
+      "branches",
+      "seed-bloom",
+      "constellations"
+    ],
+    "interactions": {
+      "hover": "reveal layers",
+      "click": "graft or open",
+      "longpress": "bookmark path",
+      "toggle": {
+        "potential": "circle-overlay",
+        "projection": "tree-growth"
+      }
+    },
+    "atlas_lens": {
+      "active_overlay": true,
+      "potential_state": {
+        "node": "circle",
+        "effects": [
+          "latent_edges_dotted",
+          "soft_glow"
+        ]
+      },
+      "projection_state": {
+        "node": "tree",
+        "effects": [
+          "l_system_growth",
+          "branch_sweep"
+        ]
+      },
+      "meaning_dial": {
+        "min": 0,
+        "max": 1,
+        "default": 0.42
+      }
+    }
+  }
+}
