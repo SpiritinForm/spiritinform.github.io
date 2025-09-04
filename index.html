@@ -47,4 +47,190 @@
           "psychological":"calm nobility, grace",
           "spiritual":"form unfolding from hidden seed"
         },
-        "relations":{"corresponds_to":["seed","branch","eye","wholeness","tree"]_
+        "relations":{"corresponds_to":["seed","branch","eye","wholeness","tree"]}
+      },
+      { "id": "root", "label": "Root", "glyph": "🪵",
+        "layers":{"physical":"anchoring fibers","psychological":"security","spiritual":"truth drawing sustenance"},
+        "relations":{"corresponds_to":["earth","seed","trunk"]} },
+      { "id": "trunk", "label": "Trunk", "glyph": "🪵",
+        "layers":{"physical":"central column","psychological":"character","spiritual":"unified channel"},
+        "relations":{"corresponds_to":["branch","root"]},
+        "children":["branch"] },
+      { "id": "branch", "label": "Branch", "glyph": "🌿",
+        "layers":{"physical":"diverging conduits","psychological":"decisions","spiritual":"truths distributing love"},
+        "relations":{"corresponds_to":["leaf","flower","fruit","tree"]},
+        "children":["leaf","flower","fruit"] },
+      { "id": "leaf", "label": "Leaf", "glyph": "🍃",
+        "layers":{"physical":"sun-drinking surface","psychological":"attention","spiritual":"reception of light"},
+        "relations":{"corresponds_to":["light","air","breath","branch"]} },
+      { "id": "flower", "label": "Flower", "glyph": "🌺",
+        "layers":{"physical":"bloom","psychological":"joy","spiritual":"truth made delightful"},
+        "relations":{"corresponds_to":["seed","beauty","magnolia"]} },
+      { "id": "fruit", "label": "Fruit", "glyph": "🍎",
+        "layers":{"physical":"sweet vessel of seeds","psychological":"reward","spiritual":"goodness made useful"},
+        "relations":{"corresponds_to":["seed","branch","use"]} }
+    ]
+  }
+  </script>
+
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+
+  <!-- App (bloom + radial map) -->
+  <script>
+  (function () {
+    const nodes = JSON.parse(document.getElementById('seeddata').textContent).nodes;
+
+    const container = document.getElementById('viz');
+    const panelTitle = document.getElementById('panel-title');
+    const panelContent = document.getElementById('panel-content');
+    const togglePotential = document.getElementById('togglePotential');
+    const toggleProjection = document.getElementById('toggleProjection');
+    const meaningDial = document.getElementById('meaningDial');
+    const state = { potential:false, projection:true, meaning:parseFloat(meaningDial.value||'0.4') };
+
+    // SVG layers
+    const svg = d3.select(container).append('svg').attr('viewBox','-420 -420 840 840');
+    const gBloom  = svg.append('g').attr('class','bg');       // “real tree” silhouette
+    const gLatent = svg.append('g').attr('class','latent');   // dotted potential links
+    const gLinks  = svg.append('g').attr('class','links');    // hierarchy edges
+    const gNodes  = svg.append('g').attr('class','nodes');    // node markers
+
+    /* ---------- BLOOM: upright tree silhouette ---------- */
+    function lsystem(iter=5, ang=21, len=36) {
+      let str = 'F';
+      const rules = { 'F': 'F[+F][-F]F' };
+      for (let i=0;i<iter;i++) str = [...str].map(ch => rules[ch] || ch).join('');
+
+      const stack = [];
+      let x=0, y=300, a=-90, L=len;  // grow upward from bottom center
+      const segs = [];
+      for (const ch of str) {
+        if (ch==='F') {
+          const nx = x + L*Math.cos(a*Math.PI/180);
+          const ny = y + L*Math.sin(a*Math.PI/180);
+          segs.push([x,y,nx,ny,L]);
+          x=nx; y=ny;
+        } else if (ch==='+') { a += ang; }
+        else if (ch==='-')    { a -= ang; }
+        else if (ch==='[')    { stack.push([x,y,a,L]); L *= 0.72; }
+        else if (ch===']')    { [x,y,a,L] = stack.pop() || [x,y,a,L]; }
+      }
+      return segs;
+    }
+
+    function drawBloom() {
+      const segs = lsystem(5, 21, 36);
+
+      gBloom.selectAll('path.trunk').data(segs).enter().append('path')
+        .attr('class','trunk')
+        .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
+        .attr('stroke','currentColor').attr('fill','none')
+        .attr('stroke-width', d=> Math.max(1.2, d[4]*0.06))
+        .attr('stroke-linecap','round')
+        .attr('stroke-dasharray','120 120')
+        .attr('stroke-dashoffset',120)
+        .transition().delay((_,i)=>i*6).duration(700)
+        .attr('stroke-dashoffset',0);
+
+      // leaf/bud dots
+      const tips = new Map();
+      segs.forEach(s => tips.set(s[2].toFixed(1)+','+s[3].toFixed(1), [s[2],s[3]]));
+      gBloom.selectAll('circle.leaf').data(Array.from(tips.values())).enter().append('circle')
+        .attr('class','leaf').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
+        .transition().delay((_,i)=>600+i*8).duration(300).attr('r',3.1);
+    }
+
+    /* ---------- RADIAL MAP ---------- */
+    function buildHierarchy() {
+      const map = new Map(nodes.map(n=>[n.id,n]));
+      const root = map.get('magnolia') || nodes[0];
+      return d3.hierarchy(root, n => (n.children||[]).map(id=>map.get(id)).filter(Boolean));
+    }
+    function point(d){ const r=d.y, a=d.x-Math.PI/2; return [Math.cos(a)*r, Math.sin(a)*r]; }
+
+    function renderRadial() {
+      const root = d3.tree().size([2*Math.PI, 260])(buildHierarchy());
+      gLinks.selectAll('path').data(root.links()).enter().append('path')
+        .attr('class','edge')
+        .attr('fill','none').attr('stroke','currentColor').attr('stroke-opacity',0.35)
+        .attr('d', d => {
+          const [sx,sy]=point(d.source), [tx,ty]=point(d.target);
+          return `M${sx},${sy}L${tx},${ty}`;
+        })
+        .attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
+        .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
+        .transition().duration(900).attr('stroke-dashoffset', 0);
+
+      const nodeEnter = gNodes.selectAll('g.node').data(root.descendants()).enter().append('g')
+        .attr('class','node')
+        .attr('transform', d=>{ const [x,y]=point(d); return `translate(${x},${y})`; })
+        .style('cursor','pointer')
+        .on('click', (_,d)=> openPanel(d.data));
+
+      nodeEnter.append('circle').attr('r', 4).attr('fill','currentColor').attr('opacity',0)
+        .transition().delay((d,i)=>i*20).duration(500).attr('opacity',1);
+
+      nodeEnter.append('text').attr('dy','-0.6em').attr('text-anchor','middle')
+        .text(d=>d.data.label).attr('opacity',0)
+        .transition().delay((d,i)=>150+i*18).duration(500).attr('opacity',0.95);
+    }
+
+    /* ---------- Panel & interactions ---------- */
+    function openPanel(node){
+      panelTitle.innerHTML = `${node.glyph?node.glyph+' ':''}${node.label}`;
+      const L = node.layers || {};
+      const pill = (k, label) => L[k] ? `<div class="pill"><strong>${label}:</strong> ${L[k]}</div>` : '';
+      panelContent.innerHTML = pill('physical','physical') + pill('psychological','psychological') + pill('spiritual','spiritual');
+    }
+
+    function latentEdges(){
+      gLatent.selectAll('*').remove();
+      if(!state.potential) return;
+
+      const positions = new Map();
+      gNodes.selectAll('g.node').each(function(d){
+        const m = d3.select(this).attr('transform');
+        const mm = /translate\(([-0-9.]+),([-0-9.]+)\)/.exec(m);
+        if(mm) positions.set(d.data.id, [parseFloat(mm[1]), parseFloat(mm[2])]);
+      });
+
+      const map = new Map(nodes.map(n=>[n.id,n]));
+      const edges=[];
+      nodes.forEach(n=>{
+        const rel = (n.relations && n.relations.corresponds_to) || [];
+        rel.forEach(r=>{ if(map.has(r) && n.id<r) edges.push([n.id,r]); });
+      });
+
+      const take = Math.max(1, Math.floor(edges.length * state.meaning));
+      edges.slice(0,take).forEach(e=>{
+        const a=positions.get(e[0]), b=positions.get(e[1]); if(!a||!b) return;
+        const [sx,sy]=a, [tx,ty]=b; const mx=(sx+tx)/2, my=(sy+ty)/2-30;
+        gLatent.append('path').attr('class','edge latent').attr('fill','none').attr('stroke','currentColor').attr('stroke-width',1)
+          .attr('d',`M ${sx},${sy} Q ${mx},${my} ${tx},${ty}`)
+          .attr('stroke-opacity',0).transition().duration(400).attr('stroke-opacity',0.5);
+      });
+    }
+
+    // Boot
+    drawBloom();
+    renderRadial();
+    openPanel(nodes.find(n=>n.id==='magnolia')||nodes[0]);
+    latentEdges();
+
+    // UI
+    togglePotential.addEventListener('click', ()=>{ state.potential=!state.potential; togglePotential.setAttribute('aria-pressed', String(state.potential)); latentEdges(); });
+    toggleProjection.addEventListener('click', ()=>{ // replay animations
+      gBloom.selectAll('path.trunk')
+        .attr('stroke-dasharray','120 120').attr('stroke-dashoffset',120)
+        .transition().duration(700).attr('stroke-dashoffset',0);
+      gLinks.selectAll('path')
+        .attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
+        .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
+        .transition().duration(900).attr('stroke-dashoffset', 0);
+    });
+    meaningDial.addEventListener('input', (e)=>{ state.meaning=parseFloat(e.target.value); latentEdges(); });
+  })();
+  </script>
+</body>
+</html>
