@@ -15,3 +15,9 @@ main{display:grid;grid-template-columns:1fr 360px;}
 .pill{margin:6px 0;padding:8px 10px;border:1px solid #eee;border-radius:8px;background:#fafafa;}
 .edge{stroke:var(--leaf);}
 .node text{font-size:12px;}
+/* Bloom silhouette styling */
+#viz svg { color: var(--leaf); }
+.trunk { opacity: 0.32; }          /* soft background branches */
+.leaf  { fill: var(--leaf); opacity: 0.18; }  /* soft little buds */
+.edge  { stroke: var(--leaf); }     /* your existing radial edges */
+.latent{ stroke-dasharray:4 4; stroke-opacity:0.25; }
