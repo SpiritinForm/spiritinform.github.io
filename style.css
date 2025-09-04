@@ -27,3 +27,6 @@ main{display:grid;grid-template-columns:1fr 360px;}
 .leaf  { fill: var(--leaf); opacity: 0.18; }  /* bud dots */
 .edge  { stroke: var(--leaf); }
 .latent{ stroke-dasharray: 4 4; stroke-opacity: 0.25; }
+/* Focus bloom */
+.focus-bloom .trunk { opacity: 0.75; }
+.focus-bloom .leaf  { opacity: 0.45; }
