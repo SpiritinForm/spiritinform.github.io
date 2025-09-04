@@ -1,5 +1,4 @@
-import seedData from './magnolia_seed.json' assert { type: 'json' };
-
+/* Magnolia Map — v2.1 compatibility: fetch JSON instead of import assertions */
 const container = document.getElementById('viz');
 const panelTitle = document.getElementById('panel-title');
 const panelContent = document.getElementById('panel-content');
@@ -11,15 +10,14 @@ let svg, gLinks, gNodes, gLatent;
 let state = {
   potential: false,
   projection: true,
-  meaning: parseFloat(meaningDial.value || '0.4'),
+  meaning: parseFloat(meaningDial?.value || '0.4'),
 };
 
-function nodeById(id, nodes) {
-  return nodes.find(n => n.id === id);
-}
+function nodeById(id, nodes) { return nodes.find(n => n.id === id); }
 
 function buildHierarchy(nodes, rootId='magnolia'){
   const rootNode = nodeById(rootId, nodes) || nodes[0];
+  if(!rootNode){ throw new Error('No nodes in dataset'); }
   const map = new Map(nodes.map(n => [n.id, n]));
   function children(n){
     const kids = (n.children || []).map(id => map.get(id)).filter(Boolean);
@@ -29,6 +27,7 @@ function buildHierarchy(nodes, rootId='magnolia'){
 }
 
 function initSVG(){
+  container.innerHTML = '';
   svg = d3.select(container).append('svg')
     .attr('viewBox', '-420 -420 840 840');
   gLatent = svg.append('g').attr('class','latent-layer');
@@ -38,10 +37,7 @@ function initSVG(){
 
 function renderTree(nodes){
   const root = buildHierarchy(nodes);
-  const tree = d3.tree()
-    .size([2*Math.PI, 340])
-    .separation((a,b)=> (a.parent==b.parent ? 1 : 2));
-
+  const tree = d3.tree().size([2*Math.PI, 340]).separation((a,b)=> (a.parent==b.parent ? 1 : 2));
   const radial = tree(root);
   const point = (d)=>{
     const r = d.y, a = d.x - Math.PI/2;
@@ -70,10 +66,7 @@ function renderTree(nodes){
 
   const nodeSel = gNodes.selectAll('g.node').data(radial.descendants(), d=> d.data.id);
   const nodeEnter = nodeSel.enter().append('g').attr('class','node')
-    .attr('transform', d=> {
-      const [x,y]=point(d);
-      return `translate(${x},${y})`;
-    })
+    .attr('transform', d=> { const [x,y]=point(d); return `translate(${x},${y})`; })
     .style('cursor','pointer')
     .on('click', (_,d)=> openPanel(d.data));
 
@@ -104,7 +97,6 @@ function latentEdges(nodes, meaning=0.4){
   if(!state.potential) return;
 
   const map = new Map(nodes.map(n=>[n.id,n]));
-
   const positions = new Map();
   gNodes.selectAll('g.node').each(function(d){
     const m = d3.select(this).attr('transform');
@@ -115,11 +107,7 @@ function latentEdges(nodes, meaning=0.4){
   const edges = [];
   nodes.forEach(n=>{
     const rels = (n.relations && n.relations.corresponds_to) ? n.relations.corresponds_to : [];
-    rels.forEach(rid => {
-      if(map.has(rid) && n.id < rid){
-        edges.push([n.id, rid]);
-      }
-    });
+    rels.forEach(rid => { if(map.has(rid) && n.id < rid){ edges.push([n.id, rid]); } });
   });
 
   const take = Math.max(1, Math.floor(edges.length * meaning));
@@ -141,30 +129,41 @@ function latentEdges(nodes, meaning=0.4){
     .transition().duration(600).attr('stroke-opacity',0.5);
 }
 
-function boot(){
-  const nodes = seedData.nodes;
-  initSVG();
-  renderTree(nodes);
-  openPanel(nodes[0]);
-  latentEdges(nodes, state.meaning);
+async function boot(){
+  try{
+    const res = await fetch('./magnolia_seed.json', {cache:'no-store'});
+    if(!res.ok) throw new Error(`Failed to load magnolia_seed.json (${res.status})`);
+    const data = await res.json();
+    const nodes = data.nodes || [];
+    if(!nodes.length){ throw new Error('magnolia_seed.json has no nodes'); }
+    initSVG();
+    renderTree(nodes);
+    openPanel(nodes.find(n=> n.id==='magnolia') || nodes[0]);
+    latentEdges(nodes, state.meaning);
 
-  togglePotential.addEventListener('click', ()=>{
-    state.potential = !state.potential;
-    togglePotential.setAttribute('aria-pressed', String(state.potential));
-    d3.select('.credit-chip').text(`Atlas UB — Lens: ${state.potential ? 'Potential (⭕) active' : 'Projection (🌳) active'}`);
-    latentEdges(nodes, state.meaning);
-  });
-  toggleProjection.addEventListener('click', ()=>{
-    state.projection = !state.projection;
-    toggleProjection.setAttribute('aria-pressed', String(state.projection));
-    gLinks.selectAll('path').attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
-      .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
-      .transition().duration(1000).ease(d3.easeCubicOut)
-      .attr('stroke-dashoffset', 0);
-  });
-  meaningDial.addEventListener('input', (e)=>{
-    state.meaning = parseFloat(e.target.value);
-    latentEdges(nodes, state.meaning);
-  });
+    // toggles
+    togglePotential?.addEventListener('click', ()=>{
+      state.potential = !state.potential;
+      togglePotential.setAttribute('aria-pressed', String(state.potential));
+      d3.select('.credit-chip').text(`Atlas UB — Lens: ${state.potential ? 'Potential (⭕) active' : 'Projection (🌳) active'}`);
+      latentEdges(nodes, state.meaning);
+    });
+    toggleProjection?.addEventListener('click', ()=>{
+      state.projection = !state.projection;
+      toggleProjection.setAttribute('aria-pressed', String(state.projection));
+      gLinks.selectAll('path').attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
+        .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
+        .transition().duration(1000).ease(d3.easeCubicOut)
+        .attr('stroke-dashoffset', 0);
+    });
+    meaningDial?.addEventListener('input', (e)=>{
+      state.meaning = parseFloat(e.target.value);
+      latentEdges(nodes, state.meaning);
+    });
+  }catch(err){
+    console.error(err);
+    panelTitle.textContent = "Setup error";
+    panelContent.innerHTML = `<p>There was a problem loading the dataset.</p><pre style="white-space:pre-wrap;background:#f7f7f7;border:1px solid #eee;padding:8px;border-radius:8px;">${String(err)}</pre>`;
+  }
 }
 boot();
