@@ -73,10 +73,8 @@
   }
   </script>
 
-  <!-- D3 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 
-  <!-- App (bloom + radial map) -->
   <script>
   (function () {
     const nodes = JSON.parse(document.getElementById('seeddata').textContent).nodes;
@@ -91,198 +89,127 @@
 
     // SVG layers
     const svg = d3.select(container).append('svg').attr('viewBox','-420 -420 840 840');
-    const gBloom  = svg.append('g').attr('class','bg');       // “real tree” silhouette
+    const gBloom  = svg.append('g').attr('class','bg');       // tree silhouette
     const gLatent = svg.append('g').attr('class','latent');   // dotted potential links
     const gLinks  = svg.append('g').attr('class','links');    // hierarchy edges
     const gNodes  = svg.append('g').attr('class','nodes');    // node markers
-    const gFocus  = svg.append('g').attr('class','focus-bloom'); // hover-driven growth
+    const gFocus  = svg.append('g').attr('class','focus-bloom'); // hover growth
 
-    /* ---------- BLOOM: upright tree silhouette ---------- */
+    let BLOOM_SEGS = [];
     function lsystem(iter=5, ang=21, len=36) {
       let str = 'F';
       const rules = { 'F': 'F[+F][-F]F' };
       for (let i=0;i<iter;i++) str = [...str].map(ch => rules[ch] || ch).join('');
-
-      const stack = [];
-      let x=0, y=300, a=-90, L=len;  // grow upward from bottom center
-      const segs = [];
+      const stack = []; let x=0, y=300, a=-90, L=len; const segs=[];
       for (const ch of str) {
         if (ch==='F') {
           const nx = x + L*Math.cos(a*Math.PI/180);
           const ny = y + L*Math.sin(a*Math.PI/180);
-          segs.push([x,y,nx,ny,L]);
-          x=nx; y=ny;
-        } else if (ch==='+') { a += ang; }
-        else if (ch==='-')    { a -= ang; }
-        else if (ch==='[')    { stack.push([x,y,a,L]); L *= 0.72; }
-        else if (ch===']')    { [x,y,a,L] = stack.pop() || [x,y,a,L]; }
+          segs.push([x,y,nx,ny,L]); x=nx;y=ny;
+        } else if (ch==='+') a+=ang;
+        else if (ch==='-') a-=ang;
+        else if (ch==='[') { stack.push([x,y,a,L]); L*=0.72; }
+        else if (ch===']') { [x,y,a,L]=stack.pop()||[x,y,a,L]; }
       }
       return segs;
     }
 
-    function drawBloom(let BLOOM_SEGS = []; // will store all segments for reuse
-) {
-      const segs = lsystem(5, 21, 36);
-BLOOM_SEGS = segs; // keep for focus rendering
-
-
+    function drawBloom() {
+      const segs = lsystem(); BLOOM_SEGS = segs;
       gBloom.selectAll('path.trunk').data(segs).enter().append('path')
         .attr('class','trunk')
         .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
         .attr('stroke','currentColor').attr('fill','none')
-        .attr('stroke-width', d=> Math.max(1.2, d[4]*0.06))
-        .attr('stroke-linecap','round')
-        .attr('stroke-dasharray','120 120')
-        .attr('stroke-dashoffset',120)
-        .transition().delay((_,i)=>i*6).duration(700)
-        .attr('stroke-dashoffset',0);
-
-      // leaf/bud dots
-      const tips = new Map();
-      segs.forEach(s => tips.set(s[2].toFixed(1)+','+s[3].toFixed(1), [s[2],s[3]]));
+        .attr('stroke-width', d=>Math.max(1.2,d[4]*0.06))
+        .attr('stroke-dasharray','120 120').attr('stroke-dashoffset',120)
+        .transition().delay((_,i)=>i*6).duration(700).attr('stroke-dashoffset',0);
+      const tips=new Map(); segs.forEach(s=>tips.set(s[2].toFixed(1)+','+s[3].toFixed(1),[s[2],s[3]]));
       gBloom.selectAll('circle.leaf').data(Array.from(tips.values())).enter().append('circle')
         .attr('class','leaf').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
         .transition().delay((_,i)=>600+i*8).duration(300).attr('r',3.1);
     }
-// Y-centers (SVG coords) for regions of the tree (tweak to taste)
-function focusYFor(id){
-  const map = {
-    root:  220,     // near bottom
-    trunk: 140,
-    branch:  40,
-    fruit:   60,
-    leaf:   -40,
-    flower: -120,
-    magnolia: 0
-  };
-  return map[id] ?? 0;
-}
-    
-    /* ---------- RADIAL MAP ---------- */
-    function buildHierarchy() {
-      const map = new Map(nodes.map(n=>[n.id,n]));
-      const root = map.get('magnolia') || nodes[0];
-      return d3.hierarchy(root, n => (n.children||[]).map(id=>map.get(id)).filter(Boolean));
+
+    function focusYFor(id){
+      const map={root:220,trunk:140,branch:40,fruit:60,leaf:-40,flower:-120,magnolia:0};
+      return map[id]??0;
     }
-    function point(d){ const r=d.y, a=d.x-Math.PI/2; return [Math.cos(a)*r, Math.sin(a)*r]; }
+    function drawFocusBloom(yCenter){
+      gFocus.selectAll('*').remove(); if(!BLOOM_SEGS.length)return;
+      const chosen=BLOOM_SEGS.filter(s=>Math.abs((s[1]+s[3])/2 - yCenter)<=80);
+      gBloom.transition().duration(250).style('opacity',0.10);
+      gFocus.selectAll('path').data(chosen).enter().append('path')
+        .attr('class','trunk focus')
+        .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
+        .attr('stroke','currentColor').attr('fill','none')
+        .attr('stroke-width',d=>Math.max(1.6,d[4]*0.07))
+        .attr('stroke-dasharray','120 120').attr('stroke-dashoffset',120)
+        .transition().duration(500).attr('stroke-dashoffset',0);
+      const tips=new Map(); chosen.forEach(s=>tips.set(s[2].toFixed(1)+','+s[3].toFixed(1),[s[2],s[3]]));
+      gFocus.selectAll('circle.leaf').data(Array.from(tips.values())).enter().append('circle')
+        .attr('class','leaf focus').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
+        .transition().duration(300).attr('r',4.2);
+    }
+    function clearFocusBloom(){ gFocus.selectAll('*').remove(); gBloom.transition().duration(250).style('opacity',0.32); }
 
-    function renderRadial() {
-      const root = d3.tree().size([2*Math.PI, 260])(buildHierarchy());
+    function buildHierarchy(){
+      const map=new Map(nodes.map(n=>[n.id,n])); const root=map.get('magnolia')||nodes[0];
+      return d3.hierarchy(root,n=>(n.children||[]).map(id=>map.get(id)).filter(Boolean));
+    }
+    function point(d){const r=d.y,a=d.x-Math.PI/2;return[Math.cos(a)*r,Math.sin(a)*r];}
+    function renderRadial(){
+      const root=d3.tree().size([2*Math.PI,260])(buildHierarchy());
       gLinks.selectAll('path').data(root.links()).enter().append('path')
-        .attr('class','edge')
-        .attr('fill','none').attr('stroke','currentColor').attr('stroke-opacity',0.35)
-        .attr('d', d => {
-          const [sx,sy]=point(d.source), [tx,ty]=point(d.target);
-          return `M${sx},${sy}L${tx},${ty}`;
-        })
-        .attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
-        .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
-        .transition().duration(900).attr('stroke-dashoffset', 0);
-
-      const nodeEnter = gNodes.selectAll('g.node').data(root.descendants()).enter().append('g')
-  .attr('class','node')
-  .attr('transform', d=>{ const [x,y]=point(d); return `translate(${x},${y})`; })
-  .style('cursor','pointer')
-  .on('mouseenter', (_,d)=> { drawFocusBloom( focusYFor(d.data.id) ); })
-  .on('mouseleave', clearFocusBloom)
-  .on('click',     (_,d)=> openPanel(d.data));
-
-
-      nodeEnter.append('circle').attr('r', 4).attr('fill','currentColor').attr('opacity',0)
+        .attr('class','edge').attr('fill','none').attr('stroke','currentColor').attr('stroke-opacity',0.35)
+        .attr('d',d=>{const[sx,sy]=point(d.source),[tx,ty]=point(d.target);return`M${sx},${sy}L${tx},${ty}`;})
+        .attr('stroke-dasharray',function(){const l=this.getTotalLength();return`${l} ${l}`;})
+        .attr('stroke-dashoffset',function(){return this.getTotalLength();})
+        .transition().duration(900).attr('stroke-dashoffset',0);
+      const nodeEnter=gNodes.selectAll('g.node').data(root.descendants()).enter().append('g')
+        .attr('class','node').attr('transform',d=>{const[x,y]=point(d);return`translate(${x},${y})`;})
+        .style('cursor','pointer')
+        .on('mouseenter',(_,d)=>drawFocusBloom(focusYFor(d.data.id)))
+        .on('mouseleave',clearFocusBloom)
+        .on('click',(_,d)=>openPanel(d.data));
+      nodeEnter.append('circle').attr('r',4).attr('fill','currentColor').attr('opacity',0)
         .transition().delay((d,i)=>i*20).duration(500).attr('opacity',1);
-
       nodeEnter.append('text').attr('dy','-0.6em').attr('text-anchor','middle')
         .text(d=>d.data.label).attr('opacity',0)
         .transition().delay((d,i)=>150+i*18).duration(500).attr('opacity',0.95);
     }
 
-    /* ---------- Panel & interactions ---------- */
     function openPanel(node){
-      panelTitle.innerHTML = `${node.glyph?node.glyph+' ':''}${node.label}`;
-      const L = node.layers || {};
-      const pill = (k, label) => L[k] ? `<div class="pill"><strong>${label}:</strong> ${L[k]}</div>` : '';
-      panelContent.innerHTML = pill('physical','physical') + pill('psychological','psychological') + pill('spiritual','spiritual');
+      panelTitle.innerHTML=`${node.glyph?node.glyph+' ':''}${node.label}`;
+      const L=node.layers||{};const pill=(k)=>L[k]?`<div class="pill"><strong>${k}:</strong> ${L[k]}</div>`:''; 
+      panelContent.innerHTML=pill('physical')+pill('psychological')+pill('spiritual');
     }
-
     function latentEdges(){
-      gLatent.selectAll('*').remove();
-      if(!state.potential) return;
-
-      const positions = new Map();
-      gNodes.selectAll('g.node').each(function(d){
-        const m = d3.select(this).attr('transform');
-        const mm = /translate\(([-0-9.]+),([-0-9.]+)\)/.exec(m);
-        if(mm) positions.set(d.data.id, [parseFloat(mm[1]), parseFloat(mm[2])]);
-      });
-
-      const map = new Map(nodes.map(n=>[n.id,n]));
-      const edges=[];
-      nodes.forEach(n=>{
-        const rel = (n.relations && n.relations.corresponds_to) || [];
-        rel.forEach(r=>{ if(map.has(r) && n.id<r) edges.push([n.id,r]); });
-      });
-
-      const take = Math.max(1, Math.floor(edges.length * state.meaning));
+      gLatent.selectAll('*').remove(); if(!state.potential)return;
+      const positions=new Map(); gNodes.selectAll('g.node').each(function(d){
+        const m=d3.select(this).attr('transform'); const mm=/translate\\(([-0-9.]+),([-0-9.]+)\\)/.exec(m);
+        if(mm)positions.set(d.data.id,[parseFloat(mm[1]),parseFloat(mm[2])]);});
+      const map=new Map(nodes.map(n=>[n.id,n])); const edges=[];
+      nodes.forEach(n=>{const rel=(n.relations&&n.relations.corresponds_to)||[];
+        rel.forEach(r=>{if(map.has(r)&&n.id<r)edges.push([n.id,r]);});});
+      const take=Math.max(1,Math.floor(edges.length*state.meaning));
       edges.slice(0,take).forEach(e=>{
-        const a=positions.get(e[0]), b=positions.get(e[1]); if(!a||!b) return;
-        const [sx,sy]=a, [tx,ty]=b; const mx=(sx+tx)/2, my=(sy+ty)/2-30;
+        const a=positions.get(e[0]),b=positions.get(e[1]);if(!a||!b)return;
+        const[sx,sy]=a,[tx,ty]=b;const mx=(sx+tx)/2,my=(sy+ty)/2-30;
         gLatent.append('path').attr('class','edge latent').attr('fill','none').attr('stroke','currentColor').attr('stroke-width',1)
           .attr('d',`M ${sx},${sy} Q ${mx},${my} ${tx},${ty}`)
           .attr('stroke-opacity',0).transition().duration(400).attr('stroke-opacity',0.5);
       });
     }
 
-    // Boot
-    drawBloom();
-    function drawFocusBloom(yCenter){
-  gFocus.selectAll('*').remove();
-  if(!BLOOM_SEGS.length) return;
-  const BAND = 80; // thickness of the focus area (px)
-  const chosen = BLOOM_SEGS.filter(s=>{
-    const midY = (s[1] + s[3]) / 2;
-    return Math.abs(midY - yCenter) <= BAND;
-  });
-  // fade base, then show local growth
-  gBloom.transition().duration(250).style('opacity', 0.10);
-  gFocus.selectAll('path').data(chosen).enter().append('path')
-    .attr('class','trunk focus')
-    .attr('d',d=>`M ${d[0]},${d[1]} L ${d[2]},${d[3]}`)
-    .attr('stroke','currentColor').attr('fill','none')
-    .attr('stroke-width', d=> Math.max(1.6, d[4]*0.07))
-    .attr('stroke-linecap','round')
-    .attr('stroke-dasharray','120 120')
-    .attr('stroke-dashoffset',120)
-    .transition().duration(500)
-    .attr('stroke-dashoffset',0);
-  // soft leaves on tips in the band
-  const tips = new Map();
-  chosen.forEach(s => tips.set(s[2].toFixed(1)+','+s[3].toFixed(1), [s[2],s[3]]));
-  gFocus.selectAll('circle.leaf').data(Array.from(tips.values())).enter().append('circle')
-    .attr('class','leaf focus').attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',0.01)
-    .transition().duration(300).attr('r',4.2);
-}
-
-function clearFocusBloom(){
-  gFocus.selectAll('*').remove();
-  gBloom.transition().duration(250).style('opacity', 0.32);
-}
-
-    renderRadial();
-    openPanel(nodes.find(n=>n.id==='magnolia')||nodes[0]);
-    latentEdges();
-
-    // UI
-    togglePotential.addEventListener('click', ()=>{ state.potential=!state.potential; togglePotential.setAttribute('aria-pressed', String(state.potential)); latentEdges(); });
-    toggleProjection.addEventListener('click', ()=>{ // replay animations
-      gBloom.selectAll('path.trunk')
-        .attr('stroke-dasharray','120 120').attr('stroke-dashoffset',120)
-        .transition().duration(700).attr('stroke-dashoffset',0);
+    drawBloom(); renderRadial(); openPanel(nodes[0]); latentEdges();
+    togglePotential.addEventListener('click',()=>{state.potential=!state.potential;togglePotential.setAttribute('aria-pressed',String(state.potential));latentEdges();});
+    toggleProjection.addEventListener('click',()=>{gBloom.selectAll('path.trunk')
+      .attr('stroke-dasharray','120 120').attr('stroke-dashoffset',120)
+      .transition().duration(700).attr('stroke-dashoffset',0);
       gLinks.selectAll('path')
-        .attr('stroke-dasharray', function(){ const l=this.getTotalLength(); return `${l} ${l}`; })
-        .attr('stroke-dashoffset', function(){ return this.getTotalLength(); })
-        .transition().duration(900).attr('stroke-dashoffset', 0);
-    });
-    meaningDial.addEventListener('input', (e)=>{ state.meaning=parseFloat(e.target.value); latentEdges(); });
+      .attr('stroke-dasharray',function(){const l=this.getTotalLength();return`${l} ${l}`;})
+      .attr('stroke-dashoffset',function(){return this.getTotalLength();})
+      .transition().duration(900).attr('stroke-dashoffset',0);});
+    meaningDial.addEventListener('input',(e)=>{state.meaning=parseFloat(e.target.value);latentEdges();});
   })();
   </script>
 </body>
